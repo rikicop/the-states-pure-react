@@ -1,17 +1,57 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import './index.css'
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+class CountingParent extends React.Component {
+  
+  state = {
+    actionCount: 0
+  };
+
+  handleAction = (action) => {
+    console.log('Child says', action);
+    
+    this.setState({
+      actionCount: this.state.actionCount + 1
+    });
+  }
+
+  handleRemove = (action) => {
+    console.log('Child says', action);
+    
+    this.setState({
+      actionCount: 0
+    });
+  }
+  render() {
+    return (
+      <div>
+        <Child onAction={this.handleAction} onRemove={this.handleRemove}/>
+        <p>Clicked {this.state.actionCount} times</p>
+      </div>
+    );
+  }
+}
+
+function Child({ onAction, onRemove }) {
+  return (
+    <>
+      <button onClick={onAction}>
+        Click Me!
+      </button><br />
+      <button onClick={onRemove}>
+        Borrar!
+      </button>
+    </>
+  );
+}
+
+const Page = () => (
+  <div>
+    <CountingParent />
+
+  </div>
+)
+
+ReactDOM.render(<Page />, document.querySelector('#root'));
